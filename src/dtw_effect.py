@@ -10,11 +10,6 @@ plt.rcParams['font.sans-serif'] = ['SimHei', 'Times New Roman']  # 用来正常�
 plt.rcParams['axes.unicode_minus'] = False
 # file = glob.glob(os.path.join(path, "DY桥头-石马河汇入（动态巡查23-B）.csv"))
 
-df = pd.read_csv('DY大朗-松木山水大陂海(动态巡查B04).csv')
-df = df[['pH', '氨氮', '浊度', '叶绿素', '电导率', '水温']]
-df = df.dropna(axis=0, how='any')
-df = df[df['氨氮'] > 1]
-
 def get_common_seq(best_path, threshold=1):
     com_ls = []
     pre = best_path[0]
