@@ -79,35 +79,44 @@ def ETL(ts1):
     df = df['氨氮'].values
     return df
 
+def mod_dtw(ts1, ts2):
+    distance12, paths12 = TimeSeriesSimilarity(ts1, ts2)
+    best_path12 = best_path(paths12)
+    com_ls1 = get_common_seq(best_path12)
+    weight12 = calculate_attenuate_weight(len(best_path12), com_ls1)
+    return distance12*weight12
+
 if __name__ == '__main__':
     df1 = ETL('DY桥头-石马河汇入（动态巡查23-B）.csv')
     df2 = ETL('DY干流-企石鸿发桥（动态巡查B40）.csv')
     df3 = ETL('DY大朗-松木山水大陂海(动态巡查B04).csv')
 
-    # 测试数据
-    s1 = np.array([1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1])
-    s2 = np.array([0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2])
-    s3 = np.array([0.8, 1.5, 0, 1.2, 0, 0, 0.6, 1, 1.2, 0, 0, 1, 0.2, 2.4, 0.5, 0.4])
-
-    # 原始算法
-    distance12, paths12 = TimeSeriesSimilarity(df1, df2)
-    distance13, paths13 = TimeSeriesSimilarity(df1, df3)
-
-    # print("更新前s1和s2距离：" + str(distance12))
-    # print("更新前s1和s3距离：" + str(distance13))
-
-    best_path12 = best_path(paths12)
-    best_path13 = best_path(paths13)
-
-    # 衰减系数
-    com_ls1 = get_common_seq(best_path12)
-    com_ls2 = get_common_seq(best_path13)
-
-    # print(len(best_path12), com_ls1)
-    # print(len(best_path13), com_ls2)
-    weight12 = calculate_attenuate_weight(len(best_path12), com_ls1)
-    weight13 = calculate_attenuate_weight(len(best_path13), com_ls2)
-
-    # 更新距离
-    print("更新后s1和s2距离：" + str(distance12 * weight12))
-    print("更新后s1和s3距离：" + str(distance13 * weight13))
+    print(mod_dtw(df1, df2))
+    print(mod_dtw(df1, df3))
+    # # 测试数据
+    # s1 = np.array([1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1])
+    # s2 = np.array([0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2])
+    # s3 = np.array([0.8, 1.5, 0, 1.2, 0, 0, 0.6, 1, 1.2, 0, 0, 1, 0.2, 2.4, 0.5, 0.4])
+    #
+    # # 原始算法
+    # distance12, paths12 = TimeSeriesSimilarity(df1, df2)
+    # distance13, paths13 = TimeSeriesSimilarity(df1, df3)
+    #
+    # # print("更新前s1和s2距离：" + str(distance12))
+    # # print("更新前s1和s3距离：" + str(distance13))
+    #
+    # best_path12 = best_path(paths12)
+    # best_path13 = best_path(paths13)
+    #
+    # # 衰减系数
+    # com_ls1 = get_common_seq(best_path12)
+    # com_ls2 = get_common_seq(best_path13)
+    #
+    # # print(len(best_path12), com_ls1)
+    # # print(len(best_path13), com_ls2)
+    # weight12 = calculate_attenuate_weight(len(best_path12), com_ls1)
+    # weight13 = calculate_attenuate_weight(len(best_path13), com_ls2)
+    #
+    # # 更新距离
+    # print("更新后s1和s2距离：" + str(distance12 * weight12))
+    # print("更新后s1和s3距离：" + str(distance13 * weight13))
