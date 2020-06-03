@@ -70,7 +70,7 @@ def ts_match(df1, df2, start, length):
             print("最大的dtw得分偏移了{}".format(o))
             print("相应的开始时间点为{}".format(cut_df2.index[0]))
             match_df2 = cut_df2
-    # print("滑动窗口的得分列表为{}".format(dtw_score))
+    print("滑动窗口的得分列表为{}".format(dtw_score))
     return match_df2, dtw_score.index(max(dtw_score))
 
 
@@ -100,7 +100,7 @@ if __name__ == '__main__':
     for start in range(0, 96, 24):
         match_dtw, idx = ts_match(df1, df2, start, length)
         pattern_dtw = df1[start:start+length]
-        plt.subplot(3, 2, i+1)
+        plt.subplot(2, 2, i+1)
         plt.plot(pattern_dtw['氨氮'].values)
         plt.plot(match_dtw['氨氮'].values, linewidth=3)
         plt.title("最匹配的曲线偏移了{}单位".format(idx))

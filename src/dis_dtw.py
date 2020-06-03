@@ -32,7 +32,7 @@ def split_list(df, n):
 
 def pre_bin(df, time_start, time_end, n):
     df = df[time_start:time_end]
-    df = df.resample('2H').mean()
+    df = df.resample('H').mean()
     # bins = split_list(df, n)
     # df_dis = pd.cut(df['氨氮'], bins, labels=range(n))
     df_dis = pd.qcut(df['氨氮'], n, labels=range(n))
@@ -40,16 +40,18 @@ def pre_bin(df, time_start, time_end, n):
 
 
 if __name__ == '__main__':
-    df1 = de.ETL('data/DY寮步-黄沙河下（动态巡查B17）.csv')
-    df2 = de.ETL('data/DY东城-筷子河（动态巡查B36）.csv')
-    k = 10
-    start = '2020-02-11'
-    end = '2020-03-05'
+    df1 = de.ETL('data/DY寮步-西南河出口(动态巡查B65).csv')
+    df2 = de.ETL('data/DY寮步-黄沙河下（动态巡查B17）.csv')
+    k = 6
+    start = '2020-02-21'
+    end = '2020-03-01'
     df1 = pre_bin(df1, start, end, k)
     print(pd.value_counts(df1))
     df2 = pre_bin(df2, start, end, k)
     print(pd.value_counts(df2))
     plt.plot(df1.tolist())
+    plt.show()
+    plt.plot(df2.tolist())
     plt.show()
     # print(df1)
     # print(df2)

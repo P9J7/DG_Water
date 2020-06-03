@@ -2,6 +2,9 @@ import numpy as np
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
+from tslearn.metrics import dtw, dtw_path
+from tslearn.preprocessing import TimeSeriesScalerMeanVariance
+
 
 pd.set_option('display.max_columns', 1000)  # 设定打印的限制
 pd.set_option('display.width', 1000)
@@ -73,10 +76,12 @@ def TimeSeriesSimilarity(s1, s2):
 
 def ETL(ts1):
     df = pd.read_csv(ts1)
-    df = df[['pH', '氨氮', '浊度', '叶绿素', '电导率', '水温']]
+    df = df[['time', '氨氮']]
     df = df.dropna(axis=0, how='any')
-    df = df[df['氨氮'] > 1]
-    df = df['氨氮'].values
+    df = df[(df['氨氮'] > 1) & (df['氨氮'] < 40)]
+    df['time'] = pd.to_datetime(df['time'])
+    df.set_index('time', inplace=True)
+    # df = df['氨氮'].values
     return df
 
 def mod_dtw(ts1, ts2):
@@ -87,23 +92,33 @@ def mod_dtw(ts1, ts2):
     return distance12*weight12
 
 if __name__ == '__main__':
-    df1 = ETL('DY桥头-石马河汇入（动态巡查23-B）.csv')
-    df2 = ETL('DY干流-企石鸿发桥（动态巡查B40）.csv')
-    df3 = ETL('DY大朗-松木山水大陂海(动态巡查B04).csv')
+    # df1 = ETL('DY桥头-石马河汇入（动态巡查23-B）.csv')
+    # df2 = ETL('DY干流-企石鸿发桥（动态巡查B40）.csv')
+    # df3 = ETL('DY大朗-松木山水大陂海(动态巡查B04).csv')
 
-    print(mod_dtw(df1, df2))
-    print(mod_dtw(df1, df3))
+    # print(mod_dtw(df1, df2))
+    # print(mod_dtw(df1, df3))
     # # 测试数据
     # s1 = np.array([1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1])
-    # s2 = np.array([0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2, 0, 1, 1, 2])
-    # s3 = np.array([0.8, 1.5, 0, 1.2, 0, 0, 0.6, 1, 1.2, 0, 0, 1, 0.2, 2.4, 0.5, 0.4])
-    #
+    s1 = np.array([-1, -2, -3, -4, -3, -2, -1, 0])
+
+    s2 = np.array([4, 3, 2, 1, 0, 1, 2, 3])
+    s3 = np.array([2.5, 2.0, 1.6, 0.9, 1.7, 2.3, 2.9, 3.4])
+    x = TimeSeriesScalerMeanVariance().fit_transform(np.vstack((s1, s2, s3)))
+    print(x)
+    s1 = x[0]
+    s2 = x[1]
+    s3 = x[2]
     # # 原始算法
-    # distance12, paths12 = TimeSeriesSimilarity(df1, df2)
-    # distance13, paths13 = TimeSeriesSimilarity(df1, df3)
+    # distance12, paths12 = TimeSeriesSimilarity(s1, s2)
+    # distance13, paths13 = TimeSeriesSimilarity(s1, s3)
+    dis12 = dtw(s1, s2)
+    dis13 = dtw(s1, s3)
+    print(dis12)
+    print(dis13)
     #
-    # # print("更新前s1和s2距离：" + str(distance12))
-    # # print("更新前s1和s3距离：" + str(distance13))
+    # print("更新前s1和s2距离：" + str(distance12))
+    # print("更新前s1和s3距离：" + str(distance13))
     #
     # best_path12 = best_path(paths12)
     # best_path13 = best_path(paths13)

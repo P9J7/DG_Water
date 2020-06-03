@@ -25,7 +25,7 @@ plt.rcParams['axes.unicode_minus'] = False
 
 
 path = os.getcwd()
-file = glob.glob(os.path.join(path, "DY桥头-石马河汇入（动态巡查23-B）.csv"))
+file = glob.glob(os.path.join(path, "data/DY干流-松山湖东部快速干线（动态巡查B30）.csv"))
 # file = glob.glob(os.path.join(path, "DY大朗-松木山水大陂海(动态巡查B04).csv"))
 dl = []
 for f in file:
@@ -42,7 +42,7 @@ ts_list = list()
 for f in data:
     # print(f[1]['氨氮'])
     ts_list.append(list(f[1]['氨氮']))
-
+print(ts_list)
 # formatted_time_series = to_time_series(df['氨氮'])
 # formatted_dataset = to_time_series_dataset([df['time'], df['氨氮']])
 # print(formatted_time_series.shape)

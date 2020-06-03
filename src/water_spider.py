@@ -7,11 +7,18 @@ import datetime
 
 if __name__ == '__main__':
     # file = open('test.json', 'w', encoding='utf-8')
-    deviceid_list = [540085038, 927141434, 643567145, 793381679, 559876913, 559614777, 928321083, 927075899, 540019503,
-                     910167583, 910167582, 912068127, 912068126, 793381684, 910167581, 928910907, 912068124, 928124484,
-                     928779835, 912002591, 911347229, 927272506]
-    start_time = "2019-12-20%2000:00:00"
-    end_time = "2020-01-20%2000:00:00"
+    # deviceid_list = [540085038, 927141434, 643567145, 793381679, 559876913, 559614777, 928321083, 927075899, 540019503,
+    #                  910167583, 910167582, 912068127, 912068126, 793381684, 910167581, 928910907, 912068124, 928124484,
+    #                  928779835, 912002591, 911347229, 927272506]
+    deviceid_list = list()
+    file = open('device_id.csv', 'r', encoding='utf-8')
+    device_list = file.readlines()
+    for i in range(1, len(device_list)):
+        deviceid_list.append(device_list.__getitem__(i).split("\t")[0])
+    print(deviceid_list)
+    print(len(deviceid_list))
+    start_time = "2020-02-06%2000:00:00"
+    end_time = "2020-03-06%2000:00:00"
     i = 1
     for deviceid in deviceid_list:
         target = 'http://www.ecomonitor.com.cn/water/opendata/data?key=hj8d9bd2bcdsddgdsa1a166076xb9zX&startTime=' + \
@@ -27,7 +34,7 @@ if __name__ == '__main__':
             if flag:
                 # 获取地点
                 places = list(data.keys())
-                csvfile = open(places[0] + '.csv', 'w', newline='', encoding='utf-8')
+                csvfile = open('data/' + places[0] + '.csv', 'w', newline='', encoding='utf-8')
                 writer = csv.writer(csvfile)
                 # 将属性列表写入csv中
                 writer.writerow(
@@ -97,4 +104,4 @@ if __name__ == '__main__':
                 flag = False
         print("爬取完成" + str(i) + "个！")
         i += 1
-        csvfile.close()
+        # csvfile.close()

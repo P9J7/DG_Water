@@ -70,8 +70,10 @@ def ar_model(data):
 
 
 if __name__ == '__main__':
-    df1 = de.ETL('DY寮步-黄沙河下（动态巡查B17）.csv')
-    # df1 = de.ETL('DY桥头-石马河汇入（动态巡查23-B）.csv')
+    # df1 = de.ETL('DY寮步-黄沙河下（动态巡查B17）.csv')
+    df1 = de.ETL('DY桥头-石马河汇入（动态巡查23-B）.csv')
+    df1 = df1.diff()
+    df1.dropna(inplace=True)
     ar_model(df1)
     # diff_plot_acf_pacf(df1, 2)
     # lag_corr(df1)
